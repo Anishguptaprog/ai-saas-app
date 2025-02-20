@@ -47,3 +47,11 @@ export const availablePlans: Plan[] = [
         isPopular:true,
     },
 ]
+const priceIDMap: Record<string, string> = {
+    week: process.env.STRIPE_WEEKLY_PRICE_ID!,
+    month: process.env.STRIPE_MONTHLY_PRICE_ID!,
+    year: process.env.STRIPE_YEARLY_PRICE_ID!,
+}
+export const getPlanIDFromType = (interval:string) => {
+    return priceIDMap[interval];
+}

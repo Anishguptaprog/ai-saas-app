@@ -21,11 +21,11 @@ type SubscribeError = {
 
 // API call function to subscribe to a plan
 const subscribeToPlan = async ({
-  planType,
+  interval,
   userId,
   email,
 }: {
-  planType: string;
+  interval: string;
   userId: string;
   email: string;
 }): Promise<SubscribeResponse> => {
@@ -33,7 +33,7 @@ const subscribeToPlan = async ({
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      planType,
+      interval,
       userId,
       email,
     }),
@@ -57,13 +57,13 @@ export default function SubscribePage() {
   const email = user?.emailAddresses?.[0]?.emailAddress || "";
 
   // React Query's useMutation hook for handling the subscription process
-  const mutation = useMutation<SubscribeResponse, Error, { planType: string }>({
-    mutationFn: async ({ planType }) => {
+  const mutation = useMutation<SubscribeResponse, Error, { interval: string }>({
+    mutationFn: async ({ interval }) => {
       if (!userId) {
         throw new Error("User not signed in.");
       }
 
-      return subscribeToPlan({ planType, userId, email });
+      return subscribeToPlan({ interval, userId, email });
     },
     onMutate: () => {
       // Optional: Show a loading toast or similar feedback
@@ -84,7 +84,7 @@ export default function SubscribePage() {
   });
 
   // Handler for subscribing to a plan
-  const handleSubscribe = (planType: string) => {
+  const handleSubscribe = (interval: string) => {
     if (!userId) {
       // Redirect to sign-up if the user is not signed in
       router.push("/sign-up");
@@ -92,7 +92,7 @@ export default function SubscribePage() {
     }
 
     // Trigger the mutation
-    mutation.mutate({ planType });
+    mutation.mutate({ interval });
   };
 
   return (
